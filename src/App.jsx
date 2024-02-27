@@ -9,4 +9,4 @@ function App() {
 </div> );
 }
 
-export default App;ç
+export default App;
