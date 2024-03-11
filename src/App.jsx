@@ -20,33 +20,48 @@ const App = () => {
     },
   ];
 
+  // A -- React Callback Handlers in JSX
+  const handleSearch = (event) => {
+
+  // D -- React Callback Handlers in JSX
+  console.log(event.target.value);
+  };
+
     return (
       <div>
         <h1> My Hacker Stories </h1>
 
-      <Search />
+      {/* // B (React Callback Handlers in JSX) */} 
+      <Search onSearch={handleSearch} />
       
       <hr />
 
       <List list={stories} />
-
     </div>
   );
 };
 
-const Search = () => {
+const Search = (props) => {
+  const [searchTerm, setSearchTerm] = React.useState('');
+
   const handleChange = (event) => {
-    // synthetic event
-    console.log(event);
-    // value of target (here: input HTML element)
-    console.log(event.target.value);
-    };
+    setSearchTerm(event.target.value);
+
+    // C -- React Callback Handlers in JSX
+    props.onSearch(event);
+  };
   
   return (
     <div>
       <label htmlFor="search">Search: </label>
       <input id="search" type="text" onChange={handleChange} />
+
+      <p> 
+        Searching for <strong> {searchTerm} </strong> .
+      </p>
+
     </div>
+
   );
 };
       
@@ -66,7 +81,7 @@ const Item = (props) => (
         <span>{props.item.author} </span>
         <span>{props.item.num_comments} </span>
         <span>{props.item.points} </span>
-      </li>
+    </li>
 );
  
 export default App;
