@@ -9,8 +9,8 @@ const App = () => {
       num_comments: 3,
       points: 4,
       objectID: 0,
-  }, 
-  {
+    },
+    {
       title: 'Redux',
       url: 'https://redux.js.org/',
       author: 'Dan Abramov, Andrew Clark',
@@ -20,68 +20,53 @@ const App = () => {
     },
   ];
 
-  // A -- React Callback Handlers in JSX
-  const handleSearch = (event) => {
-
-  // D -- React Callback Handlers in JSX
-  console.log(event.target.value);
-  };
-
-    return (
-      <div>
-        <h1> My Hacker Stories </h1>
-
-      {/* // B (React Callback Handlers in JSX) */} 
-      <Search onSearch={handleSearch} />
-      
-      <hr />
-
-      <List list={stories} />
-    </div>
-  );
-};
-
-const Search = (props) => {
   const [searchTerm, setSearchTerm] = React.useState('');
 
-  const handleChange = (event) => {
+  const handleSearch = (event) => {
     setSearchTerm(event.target.value);
-
-    // C -- React Callback Handlers in JSX
-    props.onSearch(event);
   };
-  
+
+  const searchedStories = stories.filter((story) =>
+    story.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div>
-      <label htmlFor="search">Search: </label>
-      <input id="search" type="text" onChange={handleChange} />
+      <h1>My Hacker Stories</h1>
 
-      <p> 
-        Searching for <strong> {searchTerm} </strong> .
-      </p>
+      <Search onSearch={handleSearch} />
 
+      <hr />
+
+      <List list={searchedStories} />
     </div>
-
   );
 };
-      
-const List= (props) => (
-    <ul>
-      {props.list.map((item) => (
-          <Item key={item.objectID} item={item} />
-        ))}
-    </ul>
+
+const Search = (props) => (
+  <div>
+    <label htmlFor="search">Search: </label>
+    <input id="search" type="text" onChange={props.onSearch} />
+  </div>
+);
+
+const List = (props) => (
+  <ul>
+    {props.list.map((item) => (
+      <Item key={item.objectID} item={item} />
+    ))}
+  </ul>
 );
 
 const Item = (props) => (
   <li>
-    <span> 
-      <a href={props.item.url}>{''}{props.item.title} </a>
+    <span>
+      <a href={props.item.url}>{props.item.title}</a>
     </span>
-        <span>{props.item.author} </span>
-        <span>{props.item.num_comments} </span>
-        <span>{props.item.points} </span>
-    </li>
+    <span> by {props.item.author} </span>
+    <span>{props.item.num_comments} </span>
+    <span>{props.item.points}</span>
+  </li>
 );
- 
+
 export default App;
