@@ -21,7 +21,7 @@ const initialStories = [
 
 const useStorageState = (key, initialState) => {
   const [value, setValue] = React.useState(
-      localStorage.getItem('key') || initialState 
+      localStorage.getItem(key) || initialState 
   );
 
   React.useEffect(() => {
