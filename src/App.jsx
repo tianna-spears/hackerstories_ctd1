@@ -52,6 +52,7 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState(
     'search',
     'React'
+    
   );
 
   const [stories, dispatchStories] = React.useReducer(
@@ -60,9 +61,16 @@ const App = () => {
   );
 
   React.useEffect(() => {
+    // if `searchTerm` is not present
+    // e.g. null, empty string, undefined
+    // do nothing
+    // more generalized condition than searchTerm === ''
+
+    if (!searchTerm) return;
+
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
 
-    fetch(`${API_ENDPOINT}react`) // B - Second Step for Data Fetching with React
+    fetch(`${API_ENDPOINT}${searchTerm}`) // B - Second Step for Data Fetching with React
       .then((response) => response.json()) // C - Third Step for Data Fetching with React
       .then((result) => {
         dispatchStories({
@@ -73,7 +81,7 @@ const App = () => {
     .catch(() => 
       dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
     ); 
-},  []);
+},  [searchTerm]);
 
   const handleRemoveStory = (item) => {
     dispatchStories({
@@ -85,10 +93,6 @@ const App = () => {
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
-
-  const searchedStories = stories.data.filter((story) =>
-    story.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   return (
       <div>
@@ -111,7 +115,7 @@ const App = () => {
             <p> Loading ...</p>
           ) : (
             <List 
-              list={searchedStories} 
+              list={stories.data} 
               onRemoveItem={handleRemoveStory}
             />
           )}
