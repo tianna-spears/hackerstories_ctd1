@@ -45,7 +45,7 @@ const useStorageState = (key, initialState) => {
   return [value, setValue];
 };
 
-// A - First Step for Data Fetching with React
+// A - Data Fetching with React
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 
 const App = () => {
@@ -60,28 +60,27 @@ const App = () => {
     { data: [], isLoading: false, isError: false}
   );
 
-  React.useEffect(() => {
-    // if `searchTerm` is not present
-    // e.g. null, empty string, undefined
-    // do nothing
-    // more generalized condition than searchTerm === ''
-
+  const handleFetchStories = React.useCallback(() => { // B - Memoized Functions in React (Advanced)
     if (!searchTerm) return;
 
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
 
-    fetch(`${API_ENDPOINT}${searchTerm}`) // B - Second Step for Data Fetching with React
-      .then((response) => response.json()) // C - Third Step for Data Fetching with React
+    fetch(`${API_ENDPOINT}${searchTerm}`) // B - Data Fetching with React
+      .then((response) => response.json()) // C - Data Fetching with React
       .then((result) => {
         dispatchStories({
           type: 'STORIES_FETCH_SUCCESS',
-          payload: result.hits, // D - Fourth Step for Data Fetching with React
+          payload: result.hits, // D - Data Fetching with React
         });
     })
     .catch(() => 
       dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
     ); 
-},  [searchTerm]);
+},  [searchTerm]); // E - Memoized Functions in React (Advanced)
+
+  React.useEffect(() => {
+    handleFetchStories(); // C - Memoized Functions in React (Advanced)
+  }, [handleFetchStories]); // D - Memoized Functions in React (Advanced)
 
   const handleRemoveStory = (item) => {
     dispatchStories({
