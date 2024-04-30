@@ -52,7 +52,10 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState(
     'search',
     'React'
-    
+  );
+
+  const [url, setUrl] = React.useState(
+    `${API_ENDPOINT}${searchTerm}`
   );
 
   const [stories, dispatchStories] = React.useReducer(
@@ -61,11 +64,10 @@ const App = () => {
   );
 
   const handleFetchStories = React.useCallback(() => { // B - Memoized Functions in React (Advanced)
-    if (!searchTerm) return;
 
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
 
-    fetch(`${API_ENDPOINT}${searchTerm}`) // B - Data Fetching with React
+    fetch(url)
       .then((response) => response.json()) // C - Data Fetching with React
       .then((result) => {
         dispatchStories({
@@ -76,7 +78,7 @@ const App = () => {
     .catch(() => 
       dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
     ); 
-},  [searchTerm]); // E - Memoized Functions in React (Advanced)
+},  [url]);
 
   React.useEffect(() => {
     handleFetchStories(); // C - Memoized Functions in React (Advanced)
@@ -89,8 +91,12 @@ const App = () => {
     });
   }
   
-  const handleSearch = (event) => {
+  const handleSearchInput = (event) => {
     setSearchTerm(event.target.value);
+  };
+
+  const handleSearchSubmit = () => {
+    setUrl(`${API_ENDPOINT}${searchTerm}`)
   };
 
   return (
@@ -101,10 +107,18 @@ const App = () => {
           id= "search"
           value={searchTerm}
           isFocused
-          onInputChange={handleSearch} 
+          onInputChange={handleSearchInput} 
           >
           <strong> Search: </strong>
         </InputWithLabel>
+
+        <button
+        type="button"
+        disabled={!searchTerm}
+        onClick={handleSearchSubmit}
+        >
+          Submit
+        </button>
 
           <hr />
 
