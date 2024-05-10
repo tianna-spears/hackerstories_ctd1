@@ -1,4 +1,5 @@
 import * as React from 'react';
+import axios from 'axios';
 
   const storiesReducer = (state, action) => {
     switch (action.type) {
@@ -67,8 +68,8 @@ const App = () => {
 
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
 
-    fetch(url)
-      .then((response) => response.json()) // C - Data Fetching with React
+    axios
+      .get(url)
       .then((result) => {
         dispatchStories({
           type: 'STORIES_FETCH_SUCCESS',
