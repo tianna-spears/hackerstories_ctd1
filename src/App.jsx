@@ -1,6 +1,8 @@
 import * as React from 'react';
 import axios from 'axios';
 
+import "./App.css"
+
   const storiesReducer = (state, action) => {
     switch (action.type) {
       case 'STORIES_FETCH_INIT':
@@ -101,16 +103,14 @@ const App = () => {
   };
 
   return (
-    <div>
-      <h1>My Hacker Stories</h1>
+    <div className="container">
+      <h1 className= "headline-primary">My Hacker Stories</h1>
 
     <SearchForm
       searchTerm= {searchTerm}
       onSearchInput= {handleSearchInput}
       onSearchSubmit={handleSearchSubmit}
     />
-
-      <hr />
 
       {stories.isError && <p>Something went wrong...</p>}
 
@@ -128,7 +128,7 @@ const SearchForm = ({
   onSearchInput,
   onSearchSubmit,
 }) => (
-  <form onSubmit={onSearchSubmit}>
+  <form onSubmit={onSearchSubmit} className="search-form">
     <InputWithLabel
       id= "search"
       value={searchTerm}
@@ -138,7 +138,8 @@ const SearchForm = ({
       <strong> Search: </strong>
     </InputWithLabel>
 
-    <button type="submit" disabled={!searchTerm}>
+    <button type="submit" disabled={!searchTerm}
+    className="button button_large">
       Submit
     </button>
   </form>
@@ -162,14 +163,16 @@ const InputWithLabel = ({
       
   return (
     <>
-      <label htmlFor={id}>{children} </label>  {/* B */}
-
+      <label htmlFor={id} className="label">
+        {children} 
+        </label>  {/* B */}
       <input 
         ref={inputRef}
         id= {id}
         type={type}
         value={value}
         onChange={onInputChange}
+        className="input"
       />
     </>
   );
@@ -188,15 +191,16 @@ const List = ({ list, onRemoveItem }) => (
 );
 
 const Item = ({ item, onRemoveItem }) => (
-  <li>
-    <span>
+  <li className= "item">
+    <span style={{ width: '40%' }}>
       <a href={item.url}>{item.title}</a>
     </span>
-    <span> by {item.author} </span>
-    <span>{item.num_comments} </span>
-    <span>{item.points}</span>
-    <span> 
-      <button type="button" onClick= {() => onRemoveItem(item)}>
+    <span style={{ width: '30%' }}>by {item.author} </span>
+    <span style={{ width: '10%' }}>{item.num_comments} </span>
+    <span style={{ width: '10%' }}>{item.points}</span>
+    <span style={{ width: '10%' }}> 
+      <button type="button" onClick= {() => onRemoveItem(item)}
+      className="button button_small">
         Dismiss
       </button>
     </span>
